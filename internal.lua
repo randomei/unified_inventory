@@ -1,3 +1,9 @@
+if not _IE then
+	error("\n\n[CTF Info] Please add the mod to secure.trusted_mods for the mod to function!\n")
+else
+	local utf8 = _IE.require 'lua-utf8'
+end
+
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
 local ui = unified_inventory
@@ -12,10 +18,10 @@ local ui = unified_inventory
 -- an encoding that avoids all formspec metacharacters.
 
 function ui.mangle_for_formspec(str)
-	return string.gsub(str, "([^A-Za-z0-9])", function (c) return string.format("_%d_", string.byte(c)) end)
+	return utf8.gsub(str, "([^A-Za-z0-9])", function (c) return string.format("_%d_", utf8.byte(c)) end)
 end
 function ui.demangle_for_formspec(str)
-	return string.gsub(str, "_([0-9]+)_", function (v) return string.char(v) end)
+	return utf8.gsub(str, "_([0-9]+)_", function (v) return utf8.char(v) end)
 end
 
 -- Get the player-specific unified_inventory style
@@ -360,7 +366,7 @@ function ui.apply_filter(player, filter, search_dir)
 	end
 
 	local registered_items = minetest.registered_items
-	local lfilter = string.lower(filter)
+	local lfilter = utf8.lower(filter)
 	local ffilter
 
 	if lfilter:sub(1, 6) == "group:" then
@@ -391,12 +397,12 @@ function ui.apply_filter(player, filter, search_dir)
 				return false
 			end
 
-			local lname = string.lower(name)
-			local ldesc = string.lower(def.description)
+			local lname = utf8.lower(name)
+			local ldesc = utf8.lower(def.description)
 			local llocaldesc = minetest.get_translated_string
-				and string.lower(minetest.get_translated_string(lang, def.description))
-			return string.find(lname, lfilter, 1, true) or string.find(ldesc, lfilter, 1, true)
-				or llocaldesc and string.find(llocaldesc, lfilter, 1, true)
+				and utf8.lower(minetest.get_translated_string(lang, def.description))
+			return utf8.find(lname, lfilter, 1, true) or utf8.find(ldesc, lfilter, 1, true)
+				or llocaldesc and utf8.find(llocaldesc, lfilter, 1, true)
 		end
 	end
 

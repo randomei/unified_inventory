@@ -1,3 +1,5 @@
+_IE = minetest.request_insecure_environment()
+
 -- Unified Inventory
 
 if not minetest.features.formspec_version_element then
